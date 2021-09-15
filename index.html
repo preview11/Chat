@@ -1,0 +1,364 @@
+<!-- <div class='header'>
+  <h1>WebSockets Demo</h1>
+  <p>Open multiple tabs... and talk to yourself! Woo Fun!</p>
+</div> -->
+
+<main id='stream-chat'>
+  
+  <h1>Chat</h1>
+  
+  <div class='overflow'>
+    <div id='messages'></div>
+  </div>
+  
+
+  <div id='input-area'>
+    <textarea id='input' type='text' disabled></textarea>
+    <button id='send'>Choose Name</button>
+  </div>
+
+    
+</main>
+
+<!-- <div id='description'>
+  <div class='des-title'>
+    WebSockets Demo
+  </div>
+  <div class='des-info'>
+    <div>
+      WebSockets server hosted at <a href='https://stream-chat-demo.herokuapp.com' target="_blank">stream-chat-demo.herokuapp.com</a>.
+    </div>
+    <div>
+      See the server code over on <a href="https://github.com/lioneltay/WebSocketDemoServer" target="_blank">GitHub</a>.
+    </div>
+  </div>
+</div> -->
+
+<style>
+* { padding: 0; margin: 0; box-sizing: border-box; }
+
+$background: #FFFFFF;
+$header-color: #2B2B2B;
+$odd-color: #111111;
+$even-color: #171717;
+$input-color: #090909;
+$text-color: #919090;
+
+$input-area-background: #1D1D1D;
+
+body {
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: $background;
+}
+
+//
+// NAME-INPUT
+//
+
+#name-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+//
+// STREAM-CHAT
+//
+
+$header-text-color: #EEEEEE;
+#stream-chat {
+  h1 {
+    background: $header-color;
+    color: $header-text-color;
+    text-align: center;
+    font-weight: 300;
+    padding: 1rem;
+  }
+  
+  margin: 10px;
+  min-width: 500px;
+  max-width: 600px;
+  width: 80%;
+  min-height: 500px;
+  max-height: 600px;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+
+
+
+//
+// INPUT-AREA
+//
+
+#input-area {
+  display: flex;
+  min-height: 175px;
+  flex-direction: column;
+  background: $input-area-background;
+  padding: 15px;
+}
+
+$button-background: #632F9F;
+#send {
+  align-self: flex-end;
+  padding: 8px 15px;
+  margin: 3px;
+  background: $button-background;
+  border: none;
+  color: #F8EBEC;
+  font-weight: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0px darken($button-background, 10%);
+}
+
+$input-border-color: #282828;
+#input {
+  flex-grow: 1;
+  border: 5px solid $input-border-color;
+  flex-grow: 1;
+  background: $input-color;
+  color: $text-color;
+  margin-bottom: .7em;
+  resize: none;
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+
+
+
+//
+// MESSAGES
+//
+
+$time-stamp-color: #626A6F;
+$message-text-color: #BBB7AB;
+$messages-padding-left: 12px;
+#messages {
+  min-height: 500px;
+  background: linear-gradient(to bottom, $header-color, $input-area-background);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-left: $messages-padding-left;
+  
+  .even { background: $even-color; }
+  
+  .odd { background: $odd-color; }
+  
+  .message {
+    padding: 3px 5px;
+    
+    .timestamp {
+      color: $time-stamp-color;
+      margin-right: 0.1em;
+    }
+    
+    .name {
+      font-weight: 900;
+    }
+    
+    .text {
+      margin-left: 0.1em;
+      color: $message-text-color;
+    }
+  }
+}
+
+.overflow {
+  overflow-y: scroll;
+}
+
+
+//
+// SCROLL-BAR
+//
+
+::-webkit-scrollbar {
+  width: $messages-padding-left;
+}
+
+ 
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: lighten(#2B2B2B, 20%);
+}
+
+::-webkit-scrollbar, ::-webkit-scrollbar-button, ::-webkit-scrollbar-track, ::-webkit-scrollbar-track-piece, ::-webkit-scrollbar-corner, ::-webkit-resizer {
+  background: #2B2B2B;
+}
+
+
+
+// DESCRIPTION
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #F4F3F0;
+  min-height: 100px;
+  width: 100vw;
+  
+  h1 {
+    color: #404040;
+    text-align: center;
+  }
+  
+  p {
+    color: #555555;
+  }
+}
+
+#description {
+  background: #404040;
+  color: #999999;
+  min-height: 100px;
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  
+  a {
+    color: lighten(#999999, 15%);
+    
+    &:hover {
+      color: lighten(#999999, 35%);
+    }
+  }
+}
+</style>
+
+<script>
+var connection = new WebSocket('wss://stream-chat-demo.herokuapp.com')
+
+const input = document.querySelector('#input')
+const messages = document.querySelector('#messages')
+const overflow = document.querySelector('.overflow')
+const nameInput = document.querySelector('#name-input')
+const sendButton = document.querySelector('#send')
+
+let userName, userColor
+let oddMessage = true
+let autoScroll = true
+
+// Respond to new connection
+connection.addEventListener('open', (e) => {
+
+})
+
+// Respond to WebSocket messages
+connection.addEventListener('message', (message) => {
+	let resData
+	
+  try {
+    resData = JSON.parse(message.data)
+  } catch(error) {
+		console.warn(error)
+    console.warn('The message does not seem to be valid JSON.')
+  }
+  
+	// Once message is received allow user to send another message
+	input.removeAttribute('disabled')
+	input.focus()
+	
+	if (resData.type === 'history') {
+		resData.data.forEach(message => addMessage(message))
+	}
+	
+	else if (resData.type === 'color') {
+		userColor = resData.data
+	}
+	
+	else if (resData.type === 'message') {
+		addMessage(resData.data)
+	}
+  
+  if (autoScroll) {
+    overflow.scrollTop = overflow.scrollHeight - overflow.clientHeight;
+  }
+})
+
+// Respond to user input
+function sendMessage(message) {
+  if (!message) return
+    
+  input.setAttribute('disabled', true)
+  input.value = ''
+  connection.send(message)
+
+  // The first message will be the user's name
+  if (!userName) {
+    userName = message
+    sendButton.innerHTML = 'Chat'
+  }
+}
+
+input.addEventListener('keydown', (e) => {
+	if (e.keyCode === 13) {
+		sendMessage(e.target.value)
+	}
+})
+
+sendButton.addEventListener('click', (e) => {
+  sendMessage(input.value)
+})
+
+// Add a message to message to DOM
+function addMessage(data) {
+	const newMsg = document.createElement('div')
+  
+	const time = timeString(data.timestamp)
+	const messageParity = addMessage.odd ? 'odd' : 'even'
+  addMessage.odd = !addMessage.odd
+  newMsg.setAttribute('class', `${messageParity} message`)
+  
+	newMsg.innerHTML = `
+			<span class='timestamp'>${time}</span>
+			<span class='name' style='color: ${data.color}'>${data.author}:</span>
+			<span class='text'>${data.text}</span>
+		`
+//	messages.insertBefore(newMsg, messages.childNodes[0])
+	messages.appendChild(newMsg)
+}
+
+addMessage.odd = true
+
+
+overflow.addEventListener('scroll', (e) => {
+  autoScroll = false
+  const overflow = e.target
+  if (overflow.scrollTop === overflow.scrollHeight - overflow.clientHeight) {
+    autoScroll = true
+  }
+})
+
+
+// Helper functions
+function timeString(timestamp) {
+	const date = new Date(timestamp)
+	const hour = date.getHours() % 24
+	let min = date.getMinutes()
+	min = min < 10 ? `0${min}` : min
+	
+	return `${hour}:${min}`
+}
+</script>
