@@ -1,371 +1,335 @@
 <!DOCTYPE html>
 <html>
+<head>
+<title>Page Title</title>
+</head>
 <body>
 
-<!-- <div class='header'>
-  <h1>WebSockets Demo</h1>
-  <p>Open multiple tabs... and talk to yourself! Woo Fun!</p>
-</div> -->
+<div id="container">
+	<aside class="sidebar">
+		<div class="sidebar-scroller">
+			<section class="sidebar-group">
+				<p class="sidebar-group-title">Rooms</p>
+				<button class="sidebar-btn active">Just Chatting 1</button>
+				<button class="sidebar-btn">Just Chatting 2</button>
+			</section>
+			<section class="sidebar-group">
+				<p class="sidebar-group-title">Settings</p>
+				<button class="sidebar-btn">Change Name</button>
+				<button class="sidebar-btn">Change Background</button>
+				<button class="sidebar-btn">Clear Chat</button>
+				<button class="sidebar-btn">Log Out</button>
+			</section>
+			<section class="sidebar-group">
+				<p class="sidebar-group-title">Information</p>
+        <div class="members-count">-</div>
+        <div class="members-list">-</div>
+			</section>
+		</div>
+	</aside>
+	<main class="content">
+		<div class="content-scroller">
+			<div class="wrapper">
+				<h1>A new way to chat with your friends at school or at home.</h1>
+<script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
+<!--<script type='text/javascript' src='http://0.0.0.0:8080/scaledrone.js'></script>-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<style>
 
-<main id='stream-chat'>
-  
-  <h1>Chat</h1>
-  
-  <div class='overflow'>
-    <div id='messages'></div>
-  </div>
-  
+</style>
+</head>
 
-  <div id='input-area'>
-    <textarea id='input' type='text' disabled></textarea>
-    <button id='send'>Choose Name</button>
-  </div>
+<body>
 
-    
-</main>
-
-<!-- <div id='description'>
-  <div class='des-title'>
-    WebSockets Demo
-  </div>
-  <div class='des-info'>
-    <div>
-      WebSockets server hosted at <a href='https://stream-chat-demo.herokuapp.com' target="_blank">stream-chat-demo.herokuapp.com</a>.
-    </div>
-    <div>
-      See the server code over on <a href="https://github.com/lioneltay/WebSocketDemoServer" target="_blank">GitHub</a>.
-    </div>
-  </div>
-</div> -->
+  <div class="messages"></div>
+  <form class="message-form" onsubmit="return false;">
+    <input class="message-form__input" placeholder="Type a message..." type="text" />
+    <input class="message-form__button" value="Send Message" type="submit" />
+    </input>
+  </form>
 
 <style>
-* { padding: 0; margin: 0; box-sizing: border-box; }
-
-$background: #FFFFFF;
-$header-color: #2B2B2B;
-$odd-color: #111111;
-$even-color: #171717;
-$input-color: #090909;
-$text-color: #919090;
-
-$input-area-background: #1D1D1D;
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@1,700&display=swap");
 
 body {
-  font-family: 'Lato', sans-serif;
-  min-height: 100vh;
-  min-width: 100vw;
+  box-sizing: border-box;
+  font-family: "Roboto Condensed", sans-serif;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  background: $background;
+  max-height: 100vh;
+}
+input {
+  font-family: "Roboto Condensed", sans-serif;
+}
+.members-count,
+.members-list {
+  border: 1px solid #e4e4e4;
+  padding: 10px;
+  margin-bottom: 15px;
 }
 
-//
-// NAME-INPUT
-//
+.messages {
+  border: 1px solid #e4e4e4;
+  padding: 20px;
+  margin-bottom: 15px;
+}
 
-#name-input {
+.messages {
+  flex-shrink: 1;
+  overflow: auto;
+}
+
+.message {
+  padding: 5px 0;
+}
+
+.message .member {
+  display: inline-block;
+}
+
+.member {
+  padding-right: 10px;
+  position: relative;
+}
+
+.message-form {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-shrink: 0;
 }
 
-
-//
-// STREAM-CHAT
-//
-
-$header-text-color: #EEEEEE;
-#stream-chat {
-  h1 {
-    background: $header-color;
-    color: $header-text-color;
-    text-align: center;
-    font-weight: 300;
-    padding: 1rem;
-  }
-  
-  margin: 10px;
-  min-width: 500px;
-  max-width: 600px;
-  width: 80%;
-  min-height: 500px;
-  max-height: 600px;
-  height: 80%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+.message-form__input {
+  flex-grow: 1;
+  border: 1px solid #dfdfdf;
+  padding: 10px 15px;
+  font-size: 16px;
 }
 
-
-
-
-//
-// INPUT-AREA
-//
-
-#input-area {
-  display: flex;
-  min-height: 175px;
-  flex-direction: column;
-  background: $input-area-background;
-  padding: 15px;
-}
-
-$button-background: #632F9F;
-#send {
-  align-self: flex-end;
-  padding: 8px 15px;
-  margin: 3px;
-  background: $button-background;
+.message-form__button {
   border: none;
-  color: #F8EBEC;
-  font-weight: 900;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  box-shadow: 0 0 10px 0px darken($button-background, 10%);
+  background: ;
 }
 
-$input-border-color: #282828;
-#input {
-  flex-grow: 1;
-  border: 5px solid $input-border-color;
-  flex-grow: 1;
-  background: $input-color;
-  color: $text-color;
-  margin-bottom: .7em;
-  resize: none;
-  
-  &:focus {
-    outline: none;
-  }
-}
-
-
-
-
-//
-// MESSAGES
-//
-
-$time-stamp-color: #626A6F;
-$message-text-color: #BBB7AB;
-$messages-padding-left: 12px;
-#messages {
-  min-height: 500px;
-  background: linear-gradient(to bottom, $header-color, $input-area-background);
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-left: $messages-padding-left;
-  
-  .even { background: $even-color; }
-  
-  .odd { background: $odd-color; }
-  
-  .message {
-    padding: 3px 5px;
-    
-    .timestamp {
-      color: $time-stamp-color;
-      margin-right: 0.1em;
-    }
-    
-    .name {
-      font-weight: 900;
-    }
-    
-    .text {
-      margin-left: 0.1em;
-      color: $message-text-color;
-    }
-  }
-}
-
-.overflow {
-  overflow-y: scroll;
-}
-
-
-//
-// SCROLL-BAR
-//
-
-::-webkit-scrollbar {
-  width: $messages-padding-left;
-}
-
- 
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: lighten(#2B2B2B, 20%);
-}
-
-::-webkit-scrollbar, ::-webkit-scrollbar-button, ::-webkit-scrollbar-track, ::-webkit-scrollbar-track-piece, ::-webkit-scrollbar-corner, ::-webkit-resizer {
-  background: #2B2B2B;
-}
-
-
-
-// DESCRIPTION
-
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #F4F3F0;
-  min-height: 100px;
-  width: 100vw;
-  
-  h1 {
-    color: #404040;
-    text-align: center;
-  }
-  
-  p {
-    color: #555555;
-  }
-}
-
-#description {
-  background: #404040;
-  color: #999999;
-  min-height: 100px;
-  width: 100vw;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  
-  a {
-    color: lighten(#999999, 15%);
-    
-    &:hover {
-      color: lighten(#999999, 35%);
-    }
-  }
-}
 </style>
 
 <script>
-var connection = new WebSocket('wss://stream-chat-demo.herokuapp.com')
-
-const input = document.querySelector('#input')
-const messages = document.querySelector('#messages')
-const overflow = document.querySelector('.overflow')
-const nameInput = document.querySelector('#name-input')
-const sendButton = document.querySelector('#send')
-
-let userName, userColor
-let oddMessage = true
-let autoScroll = true
-
-// Respond to new connection
-connection.addEventListener('open', (e) => {
-
-})
-
-// Respond to WebSocket messages
-connection.addEventListener('message', (message) => {
-	let resData
-	
-  try {
-    resData = JSON.parse(message.data)
-  } catch(error) {
-		console.warn(error)
-    console.warn('The message does not seem to be valid JSON.')
+const CLIENT_ID = "tcAN3oM6eMJlEfUG";
+const drone = new ScaleDrone(CLIENT_ID, {
+  data: {
+    // Will be sent out as clientData via events
+    name: getRandomName(),
+    color: getRandomColor()
   }
-  
-	// Once message is received allow user to send another message
-	input.removeAttribute('disabled')
-	input.focus()
-	
-	if (resData.type === 'history') {
-		resData.data.forEach(message => addMessage(message))
-	}
-	
-	else if (resData.type === 'color') {
-		userColor = resData.data
-	}
-	
-	else if (resData.type === 'message') {
-		addMessage(resData.data)
-	}
-  
-  if (autoScroll) {
-    overflow.scrollTop = overflow.scrollHeight - overflow.clientHeight;
+});
+
+let members = [];
+
+drone.on("open", (error) => {
+  if (error) {
+    return console.error(error);
   }
-})
+  console.log("Successfully connected to Scaledrone");
 
-// Respond to user input
-function sendMessage(message) {
-  if (!message) return
-    
-  input.setAttribute('disabled', true)
-  input.value = ''
-  connection.send(message)
+  const room = drone.subscribe("observable-room");
+  room.on("open", (error) => {
+    if (error) {
+      return console.error(error);
+    }
+    console.log("Successfully joined room");
+  });
 
-  // The first message will be the user's name
-  if (!userName) {
-    userName = message
-    sendButton.innerHTML = 'Chat'
+  room.on("members", (m) => {
+    members = m;
+    updateMembersDOM();
+  });
+
+  room.on("member_join", (member) => {
+    members.push(member);
+    updateMembersDOM();
+  });
+
+  room.on("member_leave", ({ id }) => {
+    const index = members.findIndex((member) => member.id === id);
+    members.splice(index, 1);
+    updateMembersDOM();
+  });
+
+  room.on("data", (text, member) => {
+    if (member) {
+      addMessageToListDOM(text, member);
+    } else {
+      // Message is from server
+    }
+  });
+});
+
+drone.on("close", (event) => {
+  console.log("Connection was closed", event);
+});
+
+drone.on("error", (error) => {
+  console.error(error);
+});
+
+function getRandomName() {
+  return "JohnSmith#" + Math.floor(Math.random() * 0xffffff).toString(16);
+}
+function getRandomColor() {
+  return "#" + Math.floor(Math.random() * 0xffffff).toString(16);
+}
+
+//------------- DOM STUFF
+
+const DOM = {
+  membersCount: document.querySelector(".members-count"),
+  membersList: document.querySelector(".members-list"),
+  messages: document.querySelector(".messages"),
+  input: document.querySelector(".message-form__input"),
+  form: document.querySelector(".message-form")
+};
+
+DOM.form.addEventListener("submit", sendMessage);
+
+function sendMessage() {
+  const value = DOM.input.value;
+  if (value === "") {
+    return;
+  }
+  DOM.input.value = "";
+  drone.publish({
+    room: "observable-room",
+    message: value
+  });
+}
+
+function createMemberElement(member) {
+  const { name, color } = member.clientData;
+  const el = document.createElement("div");
+  el.appendChild(document.createTextNode(name));
+  el.className = "member";
+  el.style.color = color;
+  return el;
+}
+
+function updateMembersDOM() {
+  DOM.membersCount.innerText = `${members.length} Users in room:`;
+  DOM.membersList.innerHTML = "";
+  members.forEach((member) =>
+    DOM.membersList.appendChild(createMemberElement(member))
+  );
+}
+
+function createMessageElement(text, member) {
+  const el = document.createElement("div");
+  el.appendChild(createMemberElement(member));
+  el.appendChild(document.createTextNode(text));
+  el.className = "message";
+  return el;
+}
+
+function addMessageToListDOM(text, member) {
+  const el = DOM.messages;
+  const wasTop = el.scrollTop === el.scrollHeight - el.clientHeight;
+  el.appendChild(createMessageElement(text, member));
+  if (wasTop) {
+    el.scrollTop = el.scrollHeight - el.clientHeight;
   }
 }
 
-input.addEventListener('keydown', (e) => {
-	if (e.keyCode === 13) {
-		sendMessage(e.target.value)
-	}
-})
-
-sendButton.addEventListener('click', (e) => {
-  sendMessage(input.value)
-})
-
-// Add a message to message to DOM
-function addMessage(data) {
-	const newMsg = document.createElement('div')
-  
-	const time = timeString(data.timestamp)
-	const messageParity = addMessage.odd ? 'odd' : 'even'
-  addMessage.odd = !addMessage.odd
-  newMsg.setAttribute('class', `${messageParity} message`)
-  
-	newMsg.innerHTML = `
-			<span class='timestamp'>${time}</span>
-			<span class='name' style='color: ${data.color}'>${data.author}:</span>
-			<span class='text'>${data.text}</span>
-		`
-//	messages.insertBefore(newMsg, messages.childNodes[0])
-	messages.appendChild(newMsg)
-}
-
-addMessage.odd = true
-
-
-overflow.addEventListener('scroll', (e) => {
-  autoScroll = false
-  const overflow = e.target
-  if (overflow.scrollTop === overflow.scrollHeight - overflow.clientHeight) {
-    autoScroll = true
-  }
-})
-
-
-// Helper functions
-function timeString(timestamp) {
-	const date = new Date(timestamp)
-	const hour = date.getHours() % 24
-	let min = date.getMinutes()
-	min = min < 10 ? `0${min}` : min
-	
-	return `${hour}:${min}`
-}
 </script>
+			</div>
+		</div>
+	</main>
+</div>
+
+<style>
+#container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  background: #141414;
+}
+
+.wrapper {
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  height: 100%;
+  background: #222;
+  display: flex;
+  justify-content: flex-end;
+  flex: 1 0 280px;
+}
+.sidebar-scroller {
+  height: 100%;
+  overflow: hidden auto;
+  width: 280px;
+}
+.sidebar-group {
+  padding: 15px;
+}
+.sidebar-group-title {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #888;
+  font-size: 12px;
+  margin-left: 14px;
+}
+.sidebar-btn {
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  display: block;
+  padding: 10px 14px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  color: #fff;
+}
+.sidebar-btn:not(:last-child) {
+  margin-bottom: 5px;
+}
+.sidebar-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.sidebar-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 800px;
+}
+.content-scroller {
+  height: 100%;
+  overflow: hidden auto;
+  padding: 15px;
+}
+
+body {
+  margin: 0;
+  font-size: 16px;
+  color: #fff;
+}
+
+.content h1 {
+  margin-top: 0;
+}
+.content p {
+  margin-bottom: 50px;
+}
+.content-box {
+  background: #222;
+  height: 500px;
+  margin-bottom: 15px;
+}
+</style>
 
 </body>
 </html>
