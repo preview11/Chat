@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Chatroom 1</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatroom #1</title>
 </head>
 <body>
 
-<div id="container">
-	<aside class="sidebar">
-		<div class="sidebar-scroller">
-			<section class="sidebar-group">
-				<p class="sidebar-group-title">Rooms</p>
-				<button class="sidebar-btn active">Just Chatting 1</button>
-				<button class="sidebar-btn">Just Chatting 2</button>
-			</section>
-			<section class="sidebar-group">
-				<p class="sidebar-group-title">Settings</p>
-				<button class="sidebar-btn">Change Name</button>
-				<button class="sidebar-btn">Change Background</button>
-				<button class="sidebar-btn">Clear Chat</button>
-				<button class="sidebar-btn">Log Out</button>
-			</section>
-			<section class="sidebar-group">
-				<p class="sidebar-group-title">Information</p>
-        <div class="members-count">-</div>
-        <div class="members-list">-</div>
-			</section>
-		</div>
-	</aside>
-	<main class="content">
-		<div class="content-scroller">
-			<div class="wrapper">
-				<h1>A new way to chat with your friends at school or at home.</h1>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<center><h1>Chat</h1></center>
+<br>
+
+<body style="padding-top:50px; padding-bottom: 70px;">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="list-group" style="padding-bottom:15px;">
+          <div class="card">
+            <div class="card-body">
+              <a id="shmenulinks" class="nav-link" style="border-radius: 0.25rem; cursor: pointer; width: 100%;" data-toggle="collapse" aria-expanded="true" aria-controls="menulinks" data-target="#menulinks"><i class="fa fa-bars" aria-hidden="true"></i> Open/Close menu</a>
+              <div id="menulinks" class="nav nav-pills collapse">
+                <p>Chatrooms:</p>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/" target="blank" class="nav-link "><i class="fa fa-home" aria-hidden="true"></i> Just Chatting #1</a>
+                 <a style="width: 100%;" href="https://preview11.github.io/Chat2/" target="blank" class="nav-link "><i class="fa fa-home" aria-hidden="true"></i> Just Chatting #2</a>
+                <br>
+                <p>Settings:</p>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/" target="blank" class="nav-link "><i class="fa fa-cog" aria-hidden="true"></i> Change Name</a>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/" target="blank" class="nav-link "><i class="fa fa-cog" aria-hidden="true"></i> Clear Chat</a>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/" target="blank" class="nav-link "><i class="fa fa-cog" aria-hidden="true"></i> Change Background</a>
+                <br>
+                <p>Other:</p>
+                  <div class="members-count">-</div>
+                  <div class="members-list">-</div>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/" target="blank" class="nav-link active"><i class="fa fa-sign-out" aria-hidden="true"></i> Disconect</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="conteudo" class="col-lg-9">
+        <div class="card">
+          <div class="card-body">
+            
 <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
 <!--<script type='text/javascript' src='http://0.0.0.0:8080/scaledrone.js'></script>-->
 <meta charset="utf-8">
@@ -42,7 +61,6 @@
 </head>
 
 <body>
-
   <div class="messages"></div>
   <form class="message-form" onsubmit="return false;">
     <input class="message-form__input" placeholder="Type a message..." type="text" />
@@ -57,6 +75,7 @@ body {
   box-sizing: border-box;
   font-family: "Roboto Condensed", sans-serif;
   margin: 0;
+  padding: 13px;
   display: flex;
   flex-direction: column;
   max-height: 100vh;
@@ -65,15 +84,10 @@ input {
   font-family: "Roboto Condensed", sans-serif;
 }
 .members-count,
-.members-list {
-  border: 1px solid #e4e4e4;
-  padding: 10px;
-  margin-bottom: 15px;
-}
-
+.members-list,
 .messages {
   border: 1px solid #e4e4e4;
-  padding: 20px;
+  padding: 15px;
   margin-bottom: 15px;
 }
 
@@ -174,7 +188,7 @@ drone.on("error", (error) => {
 });
 
 function getRandomName() {
-  return "JohnSmith#" + Math.floor(Math.random() * 0xffffff).toString(16);
+  return "Steve#" + Math.floor(Math.random() * 0xffffff).toString(16);
 }
 function getRandomColor() {
   return "#" + Math.floor(Math.random() * 0xffffff).toString(16);
@@ -214,7 +228,7 @@ function createMemberElement(member) {
 }
 
 function updateMembersDOM() {
-  DOM.membersCount.innerText = `${members.length} Users in room:`;
+  DOM.membersCount.innerText = `${members.length} users in room:`;
   DOM.membersList.innerHTML = "";
   members.forEach((member) =>
     DOM.membersList.appendChild(createMemberElement(member))
@@ -239,98 +253,50 @@ function addMessageToListDOM(text, member) {
 }
 
 </script>
-			</div>
-		</div>
-	</main>
-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
 
 <style>
-#container {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  background: #141414;
-}
-
-.wrapper {
-  max-width: 800px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.sidebar {
-  height: 100%;
-  background: #222;
-  display: flex;
-  justify-content: flex-end;
-  flex: 1 0 280px;
-}
-.sidebar-scroller {
-  height: 100%;
-  overflow: hidden auto;
-  width: 280px;
-}
-.sidebar-group {
-  padding: 15px;
-}
-.sidebar-group-title {
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #888;
-  font-size: 12px;
-  margin-left: 14px;
-}
-.sidebar-btn {
-  background: transparent;
-  border: none;
-  border-radius: 3px;
-  display: block;
-  padding: 10px 14px;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  color: #fff;
-}
-.sidebar-btn:not(:last-child) {
-  margin-bottom: 5px;
-}
-.sidebar-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-.sidebar-btn.active {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 800px;
-}
-.content-scroller {
-  height: 100%;
-  overflow: hidden auto;
-  padding: 15px;
+.card {
+  box-shadow: 10px 10px 15px 0px rgb(0 0 0 / 21%);
 }
 
 body {
-  margin: 0;
-  font-size: 16px;
-  color: #fff;
+  background-color: #e2e2e2 !important;
 }
 
-.content h1 {
-  margin-top: 0;
+@media screen and (min-width: 992px) {
+  
+   #menulinks {
+      display: block;
+   }
+   #shmenulinks {
+      display: none;
+   }
+
 }
-.content p {
-  margin-bottom: 50px;
+
+@media screen and (max-width: 991px) {
+  
+   #shmenulinks {
+      display: block;
+   }
+  
 }
-.content-box {
-  background: #222;
-  height: 500px;
-  margin-bottom: 15px;
+
+a:active, a:hover {
+color: #043959;
+    box-shadow: 0 0 0 1px #4f94d4, 0 0 2px 1px rgb(79 148 212 / 80%);
+    outline: 1px solid transparent;
 }
 </style>
+
+
+
 
 </body>
 </html>
